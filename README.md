@@ -1,72 +1,63 @@
-# Genshin Impact Rich Presence - work in progress (Sumeru update)
+# Genshin Impact Rich Presence
 
-Only works on english text and works best when traveling from a place to another instead of teleporting to it since it gives time for the app to read the place title you are in best
+![Screenshot](images/discRPC%20sample%201.png) ![Screenshot](images/discRPC%20sample%202.png) ![Screenshot](images/discRPC%20sample%203.png)
 
-also check the tutorial.txt
+> - Windows only
+> - Game text language must be English.
+> - Works best when traveling from a place to another instead of teleporting to it since it gives time for the app to read the place title you are in best
+> - Supported resolutions: 1920x1080, 2560x1440, 2560x1080 (Ultrawide) fullscreen
+> - Party must have 4 members, works for Single Player mode only (TODO: Alternate party setup support)
 
-<p>
-A proof of concept Rich Presence, works most of the time for characters but struggles sometimes when knowing where you are,
-might be a bit laggy if you dont have a good pc, also only works well in 1920x1080, 2560x1440, 2560x1080(Ultrawide) fullscreen displays might fix it if i find a way to do so
+This Discord Rich Presence doesn't tamper with Genshin Impact game files in any way. It works by scanning text in screen captures.
 
-This Discord Rich Presence doesnt tamper with Genshin Impact in any way aside from taking screenshots from the game and using tesseract to turn the images into text usable for code for the rich presence
+-----
 
-all the image assets Belong to Genshin Impact and Mihoyo/Hoyoverse, some taken from the Genshin Impact wiki https://genshin-impact.fandom.com/ and others screenshots from the game by me.
+## Setup guide
 
-</p>
+### 0. Install Python
 
-![Screenshot](Screenshot.png)
-![Screenshot](Screenshot2.png)
-![Screenshot](Screenshot3.png)
+You will need Python 3.8 or newer (latest Python version is recommended). Install from [here](https://www.python.org/downloads/).
 
-if you want to talk to me about something from this discord rich presence use the `Discussions` tab on github
+### 1. Update NVIDIA Game Ready Driver
 
-## Before Using
+Update to the latest NVIDIA game ready graphics driver that supports CUDA 11.8 (version > 525).
 
-Tesseract is needed to run the image to text algorithm so needs to be installed before trying it
+### 2. Setup image capture coordinates
 
-- [`Tesseract`](https://digi.bib.uni-mannheim.de/tesseract/?C=M;O=A) == [5.0.1](https://digi.bib.uni-mannheim.de/tesseract/tesseract-ocr-w64-setup-v5.0.1.20220118.exe) (To scan the images for texts)
+Modify [CONFIG.py](CONFIG.py) to configure coordinates of specific game text as shown below.
 
-In order to complete the installation of `Tesseract`, make sure it is run-able from the Command Prompt (visible from the Windows `PATH` environment variable):
+If you're running the game in fullscreen with a standard 16:9 aspect ratio, you can just set the `GAME_RESOLUTION` variable to your screen resolution (e.g. `GAME_RESOLUTION = 1080` for 1920x1080, 1080p).
 
-```cmd
-tesseract
+🟠 If you're using DLDSR/DLSS/NVIDIA Image Sharpening or any otherGPU configuration that performs image upscaling or oversampling (not counting the built-in AMD FSR2 anti-aliasing mode), you'll need to set this to the final output resolution that your screen will display. E.g. 75% resolution with NVIDIA Image Sharpening will still result in an image with the same resolution as your monitor, so you should use the monitor resolution instead of the in-game resolution.
+
+The **`GAME_RESOLUTION` setting only works if you're running the game in fullscreen at a 16:9 aspect ratio.** Otherwise, you'll need to set `GAME_RESOLUTION = 0` and follow [this guide to configure the coordinates manually.](configure%20coordinates.md)
+
+### 3. Configure settings in [CONFIG.py](CONFIG.py)
+
+- Configure `USERNAME` to match your Genshin username (must be exactly the same)
+- Set `MC_AETHER = True` if Aether is MC, `MC_AETHER = False` if Lumine is MC.
+- (SPOILER) Set `WANDERER_NAME` to match custom Wanderer's name in lowercase.
+
+### 4. [Optional] Test if image capture works
+
+Run [test_imagegrab.py](test_imagegrab.py) in Python using cmd/terminal/powershell or otherwise.
+
+```bat
+py test_imagegrab.py
 ```
 
-If it is not detected, add your installation folder to the Windows `PATH` variable.
+- Alt+tab to Genshin and leave it running for about 10s. Then, change characters and visit a few places (make sure the location text pops up)
+- Check the terminal to make sure everything works.
+- If you have two monitors, you can enable the capture display windows by setting `SHOW_CHARACTERS = True`, `SHOW_LOC = True` etc... in [test_imagegrab.py](test_imagegrab.py). This way, you can monitor image captures without needing to alt+tab.
 
+### 5. Start Discord Rich Presence
 
-in windows 10 open settings, go to system, go to about then press advanced system settings on the right side
+Double click [run.bat](run.bat) to start Discord Rich Presence for Genshin Impact.
 
-or
+-----
 
-press the windows key and type path on the search bar and open edit the system environment and variables
+## Credits
 
-should give you something like this 
+Image assets are intellectual property of HoYoverse.
 
-![Screenshot](Screenshot4.png)
-
-press environment variables on the bottom of the first window
-
-on system variables scroll until you see Path and while selected press Edit
-
-Press on new and copy paste the installation folder of Tesseract that you installed a bit ago, default should be C:\Program Files\Tesseract-OCR
-
-then press ok and ok and ok
-
-## Acknowledgement
-
-Thanks to [Kxnrl](https://github.com/Kxnrl) and [parampaa2](https://github.com/parampaa2)  for the idea of rich presence with tesseract
-
-Thanks to [Kataiser](https://github.com/Kataiser) too for the base code that i used on this rich presence
-
-## Known Issues
-
-its not accurate at times and reads the names of the map too when you check on it
-
-## ToDo
-
-make a whitelist so it ignores everything else that isnt the string of text i want it to read, and that would permit the tesseract to be used in full screen instead of 2 boxes though might be a bit cpu intensive, will need to see without it reading and putting everything it sees in your screen into the log
-
-also uses your drive for storing and deleting a image a lot so might make your pc fans ramp up
-
-at a later date will hide the tracking windows so they dont get on the way for now i need them for debugging and to know, well, where they are
+Some images are taken from the [GI fandom wiki](https://genshin-impact.fandom.com/), and [@Zanzancomms](https://github.com/Zanzancomms).
