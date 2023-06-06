@@ -79,6 +79,9 @@ try:
 except Exception as e:
     print(f"Error loading data/bosses.csv: {e}")
 
+BOSSES_SHORTEST_SEARCH = min([len(b.search_str) for b in BOSSES])
+CHARACTERS_SHORTEST_SEARCH = min([len(c.search_str) for c in CHARACTERS])
+LOCATIONS_SHORTEST_SEARCH = min([len(l.search_str) for l in LOCATIONS])
 
 current_active_character = 0  # 1-indexed. 0 is undetectable/game paused.
 
@@ -294,6 +297,9 @@ def character_search(charname_text) -> Optional[Character]:
     """
     Searches for matching character based on best match available
     """
+    if len(charname_text) < CHARACTERS_SHORTEST_SEARCH:
+        return None
+    
     if charname_text.lower() in party_capture_cache:
         return party_capture_cache[charname_text.lower()]
 
@@ -316,6 +322,9 @@ def location_search(loc_text) -> Optional[Location]:
     """
     Searches for matching location based on the best match available.
     """
+    if len(loc_text) < LOCATIONS_SHORTEST_SEARCH:
+        return None
+    
     if loc_text.lower() in location_capture_cache:
         return location_capture_cache[loc_text.lower()]
 
@@ -345,6 +354,9 @@ def boss_search(boss_text) -> Optional[Boss]:
     """
     Searches for matching world boss based on the best match available.
     """
+    if len(boss_text) < BOSSES_SHORTEST_SEARCH:
+        return None
+    
     if boss_text.lower() in world_boss_capture_cache:
         return world_boss_capture_cache[boss_text.lower()]
 
