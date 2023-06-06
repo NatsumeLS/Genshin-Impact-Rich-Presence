@@ -1,7 +1,7 @@
 """
 ___________________________________________________________________
 
-Genshin Impact Discord Rich Presence v0.1
+Genshin Impact Discord Rich Presence v0.1.1
 
 Setup CONFIG.py with the game resolution, username, etc...
 before using.
@@ -65,7 +65,7 @@ except Exception as e:
 
 try:
     with open("data/locations.csv", "r") as csvfile:
-        reader = csv.reader(csvfile, delimiter=",")
+        reader = csv.reader(csvfile, delimiter=",", escapechar="\\")
         LOCATIONS = [Location(*row) for row in reader]
         print("Loaded locations.csv")
 except Exception as e:
@@ -126,15 +126,21 @@ Shows the last displayed game pause state.
 (Needed to prevent spamming console with the same game paused/resumed message).
 """
 
-domain_cooldown = 0
+inactive_detection_cooldown = 0
 """
-Only detect domain if domain_cooldown == 0.
+In non-active charcter detection mode, limit other detections if some inactive action is detected.
 
-This value gets set to `CONFIG.PARTY_SETUP_DOMAIN_COOLDOWN` when party setup screen is detected,
+(Inactive refers to no active characters detectable, e.g. party setup/domain name/map teleporter location)
+
+This value gets set to `CONFIG.INACTIVE_COOLDOWN` when party setup screen is detected,
 and decremented each iteration.
 
-"Party Setup" text could be missed by OCR, which causes 4th character in party to be read as domain.
-To reduce CPU and prevent incorrect domain detection.
+Reduces CPU and prevent incorrect domain detection.
+"""
+
+inactive_detection_mode: Optional[ActivityType] = None
+"""
+What was the inactive activity that was last detected.
 """
 
 
@@ -263,17 +269,99 @@ ps_window_thread_instance: threading.Thread = None
 def update_genshin_open_status():
     global pause_ocr
 
-    if ps_helper.check_process_window_open(GENSHIN_WINDOW_CLASS, GENSHIN_WINDOW_NAME) and pause_ocr:
+    if (
+        ps_helper.check_process_window_open(GENSHIN_WINDOW_CLASS, GENSHIN_WINDOW_NAME)
+        and pause_ocr
+    ):
         pause_ocr = False
         print("GenshinImpact.exe resumed. Resuming OCR.")
-    elif not ps_helper.check_process_window_open(GENSHIN_WINDOW_CLASS, GENSHIN_WINDOW_NAME) and not pause_ocr:
+    elif (
+        not ps_helper.check_process_window_open(
+            GENSHIN_WINDOW_CLASS, GENSHIN_WINDOW_NAME
+        )
+        and not pause_ocr
+    ):
         pause_ocr = True
         print("GenshinImpact.exe minimized/closed. Pausing OCR.")
 
- 
+
 party_capture_cache = {}
 world_boss_capture_cache = {}
 location_capture_cache = {}
+
+
+def character_search(charname_text) -> Optional[Character]:
+    """
+    Searches for matching character based on best match available
+    """
+    if charname_text.lower() in party_capture_cache:
+        return party_capture_cache[charname_text.lower()]
+
+    charname_match = [c for c in CHARACTERS if c.search_str in charname_text.lower()]
+    charname_match.sort(key=lambda c: len(c.search_str), reverse=True)
+    if DEBUG_MODE and len(charname_match) > 1:
+        print(
+            f'WARN: Multiple characters matched for "{charname_text}": {[c.character_name for c in charname_match]}'
+        )
+        print("Picking longest match")
+    if len(charname_match) > 0:
+        party_capture_cache[charname_text.lower()] = charname_match[0]
+        return charname_match[0]
+
+    party_capture_cache[charname_text.lower()] = None
+    return None
+
+
+def location_search(loc_text) -> Optional[Location]:
+    """
+    Searches for matching location based on the best match available.
+    """
+    if loc_text.lower() in location_capture_cache:
+        return location_capture_cache[loc_text.lower()]
+
+    location_match = [l for l in LOCATIONS if l.search_str in loc_text.lower()]
+    location_match.sort(key=lambda l: len(l.search_str), reverse=True)
+
+    loc = None
+
+    if len(location_match) > 0:
+        loc = location_match[0]
+
+    location_capture_cache[loc_text.lower()] = loc
+
+    if DEBUG_MODE:
+        if len(location_match) > 1:
+            print(
+                f'WARN: Multiple locations matched for "{loc_text}": {[l.location_name for l in location_match]}'
+            )
+            print("Picking longest match")
+        print(
+            f'Added "{loc_text.lower()}" to cache: {loc and loc.location_name} ({len(location_capture_cache)})'
+        )
+    return loc
+
+
+def boss_search(boss_text) -> Optional[Boss]:
+    """
+    Searches for matching world boss based on the best match available.
+    """
+    if boss_text.lower() in world_boss_capture_cache:
+        return world_boss_capture_cache[boss_text.lower()]
+
+    boss_match = [b for b in BOSSES if b.search_str in boss_text.lower()]
+    boss_match.sort(key=lambda b: len(b.search_str), reverse=True)
+    if DEBUG_MODE and len(boss_match) > 1:
+        print(
+            f'WARN: Multiple world bosses matched for "{boss_text}": {[b.boss_name for b in boss_match]}'
+        )
+        print("Picking longest match")
+    if len(boss_match) > 0:
+        world_boss_capture_cache[boss_text.lower()] = boss_match[0]
+        return boss_match[0]
+
+    world_boss_capture_cache[boss_text.lower()] = None
+    return None
+
 
 loop_count = 0
 
@@ -317,7 +405,7 @@ while True:
         print(
             "OSError: Cannot capture screen. Try running as admin if this issue persists."
         )
-        time.sleep(100)
+        time.sleep(1)
         continue
 
     charnumber_brightness = [sum(rgb) for rgb in charnumber_cap]
@@ -352,7 +440,7 @@ while True:
             ps_window_thread_instance.start()
 
     if found_active_character:
-        domain_cooldown = 0  # reset anti-domain read cooldown
+        inactive_detection_cooldown = 0  # reset anti-domain read cooldown
 
         if current_activity.is_idle():
             # Restore previous activity once an active character is detected.
@@ -375,7 +463,7 @@ while True:
                 print(
                     "OSError: Cannot capture screen. Try running as admin if this issue persists."
                 )
-                time.sleep(100)
+                time.sleep(1)
                 continue
 
             # ([bbox top left, top right, bottom right, bottom left], text, confidence)
@@ -393,38 +481,15 @@ while True:
                     avg_conf = sum([r[2] for r in result]) / len(result)
 
                     if avg_conf > NAME_CONF_THRESH:
-                        if text.lower() in party_capture_cache:
-                            if party_capture_cache[text.lower()] != None:
-                                # use cache if available
-                                cache_match = party_capture_cache[text.lower()]
-                                current_characters[character_index] = cache_match
-                        else:
-                            # search through character list for matching name.
-                            matched_character = [
-                                c for c in CHARACTERS if c.search_str in text.lower()
-                            ]
-                            if len(matched_character) == 1 and (
-                                current_characters[character_index] == None
-                                or matched_character[0]
-                                != current_characters[character_index]
-                            ):
-                                party_capture_cache[text.lower()] = matched_character[0]
-                                current_characters[character_index] = matched_character[
-                                    0
-                                ]
-                                print(
-                                    f"Detected character {character_index + 1}: {matched_character[0].character_display_name}"
-                                )
-                            elif len(matched_character) == 0:
-                                party_capture_cache[text.lower()] = None
-                                print(f"WARN: couldn't find character with name {text}")
-                            elif len(matched_character) > 1:
-                                party_capture_cache[text.lower()] = None
-                                print(
-                                    f"ERROR: multiple characters matched with name {text}: "
-                                    + f"{[c.character_display_name for c in matched_character]}"
-                                )
-                                print('Fix characters.csv.')
+                        char = character_search(text)
+                        if char != None and (
+                            current_characters[character_index] == None
+                            or char != current_characters[character_index]
+                        ):
+                            current_characters[character_index] = char
+                            print(
+                                f"Detected character {character_index + 1}: {char.character_display_name}"
+                            )
 
         # _____________________________________________________________________
         #
@@ -438,7 +503,7 @@ while True:
                 print(
                     "OSError: Cannot capture screen. Try running as admin if this issue persists."
                 )
-                time.sleep(100)
+                time.sleep(1)
                 continue
 
             loc_results = reader.readtext(loc_cap, allowlist=ALLOWLIST)
@@ -454,59 +519,16 @@ while True:
                     if current_activity.activity_type != ActivityType.COMMISSION:
                         current_activity = Activity(ActivityType.COMMISSION, None)
                         print(f"Detected doing commissions")
-
-                elif loc_text.lower() in location_capture_cache:
-                    if location_capture_cache[loc_text.lower()] != None:
-                        # use cache if available
-                        cache_match = location_capture_cache[loc_text.lower()]
-                        if cache_match != None and (
-                            current_activity.activity_type != ActivityType.LOCATION
-                            or current_activity.activity_data.search_str
-                            != cache_match.search_str
-                        ):
-                            current_activity = Activity(
-                                ActivityType.LOCATION, cache_match
-                            )
-                            prev_location = cache_match
-                            print(f"Detected location: {cache_match.location_name}")
                 else:
-                    location_match = [
-                        l for l in LOCATIONS if l.search_str in loc_text.lower()
-                    ]
-
-                    # If more than one location match, just use the first one.
-                    # (This can happen in the map)
-                    if len(location_match) >= 1 and (
+                    location = location_search(loc_text)
+                    if location != None and (
                         current_activity.activity_type != ActivityType.LOCATION
                         or current_activity.activity_data.search_str
-                        != location_match[0].search_str
+                        != location.search_str
                     ):
-                        if len(location_match) > 1:
-                            print(
-                                f"WARN: multiple locations matched with name {loc_text}: "
-                                + f"{[l.location_name for l in location_match]}"
-                            )
-                            print(
-                                f"Using first match: {location_match[0].location_name}"
-                            )
-
-                        location_capture_cache[loc_text.lower()] = location_match[0]
-                        current_activity = Activity(
-                            ActivityType.LOCATION, location_match[0]
-                        )
-                        prev_location = location_match[0]
-                        print(f"Detected location: {location_match[0].location_name}")
-
-                    elif len(location_match) == 0:
-                        location_capture_cache[loc_text.lower()] = None
-                        # print(f"WARN: couldn't find location with name {loc_text}")
-                        # A lot of non-location text is expected to be captured in this box.
-                    
-                    if DEBUG_MODE:
-                        loc = location_capture_cache[loc_text.lower()]
-                        print(f'added "{loc_text.lower()}" = '+
-                              f'"{loc and loc.location_name or None}" to location cache '
-                              + f'({len(location_capture_cache)})')
+                        current_activity = Activity(ActivityType.LOCATION, location)
+                        prev_location = location
+                        print(f"Detected location: {location.location_name}")
 
         # _____________________________________________________________________
         #
@@ -520,7 +542,7 @@ while True:
                 print(
                     "OSError: Cannot capture screen. Try running as admin if this issue persists."
                 )
-                time.sleep(100)
+                time.sleep(1)
                 continue
 
             boss_results = reader.readtext(boss_cap, allowlist=ALLOWLIST)
@@ -532,95 +554,73 @@ while True:
                 ]
             )
             if len(boss_text) > 0:
-                if boss_text.lower() in world_boss_capture_cache:
-                    if world_boss_capture_cache[boss_text.lower()] != None:
-                        # use cache if available
-                        cache_match = world_boss_capture_cache[boss_text.lower()]
-                        if cache_match != None and (
-                            current_activity.activity_type != ActivityType.WORLD_BOSS
-                            or current_activity.activity_data.search_str
-                            != cache_match.search_str
-                        ):
-                            current_activity = Activity(
-                                ActivityType.WORLD_BOSS, cache_match
-                            )
-                            print(f"Detected boss: {cache_match.boss_name}")
-                else:
-                    boss_match = [
-                        b for b in BOSSES if b.search_str in boss_text.lower()
-                    ]
+                boss = boss_search(boss_text)
 
-                    if len(boss_match) == 1 and (
-                        current_activity.activity_type != ActivityType.WORLD_BOSS
-                        or current_activity.activity_data.search_str
-                        != boss_match[0].search_str
-                    ):
-                        world_boss_capture_cache[boss_text.lower()] = boss_match[0]
-                        current_activity = Activity(
-                            ActivityType.WORLD_BOSS, boss_match[0]
-                        )
-                        print(f"Detected boss: {boss_match[0].boss_name}")
-                    elif len(boss_match) > 1:
-                        world_boss_capture_cache[boss_text.lower()] = None
-                        print(
-                            f"WARN: multiple bosses matched with name {boss_text}: "
-                            + f"{[b.boss_name for b in boss_match]}"
-                        )
-                    elif len(boss_match) == 0:
-                        world_boss_capture_cache[boss_text.lower()] = None
+                if boss != None and (
+                    current_activity.activity_type != ActivityType.WORLD_BOSS
+                    or current_activity.activity_data.search_str != boss.search_str
+                ):
+                    current_activity = Activity(ActivityType.WORLD_BOSS, boss)
+                    print(f"Detected boss: {boss.boss_name}")
 
     elif not found_active_character:
         curr_game_paused = True  # Set False later if domain/party setup detected.
 
-        if domain_cooldown > 0:
-            domain_cooldown -= 1
+        if inactive_detection_cooldown > 0:
+            inactive_detection_cooldown -= 1
 
         # _____________________________________________________________________
         #
         # CAPTURE PARTY SETUP TEXT
         # _____________________________________________________________________
 
-        try:
-            party_cap = np.array(ImageGrab.grab(bbox=PARTY_SETUP_COORD))
-        except OSError:
-            print(
-                "OSError: Cannot capture screen. Try running as admin if this issue persists."
-            )
-            time.sleep(100)
-            continue
-
-        party_results = reader.readtext(party_cap, allowlist=ALLOWLIST)
-
-        party_text = " ".join(
-            [
-                word.strip()
-                for word in [r[1] for r in party_results if r[2] > LOC_CONF_THRESH]
-            ]
-        )
-        if "party setup" in party_text.lower():
-            curr_game_paused = False
-            domain_cooldown = PARTY_SETUP_DOMAIN_COOLDOWN
-            if current_activity.activity_type != ActivityType.PARTY_SETUP:
-                current_activity = Activity(
-                    ActivityType.PARTY_SETUP, prev_non_idle_activity
+        if (
+            inactive_detection_cooldown == 0
+            or inactive_detection_mode == ActivityType.PARTY_SETUP
+        ):
+            try:
+                party_cap = np.array(ImageGrab.grab(bbox=PARTY_SETUP_COORD))
+            except OSError:
+                print(
+                    "OSError: Cannot capture screen. Try running as admin if this issue persists."
                 )
-                print(f"Entered Party Setup")
+                time.sleep(1)
+                continue
+
+            party_results = reader.readtext(party_cap, allowlist=ALLOWLIST)
+
+            party_text = " ".join(
+                [
+                    word.strip()
+                    for word in [r[1] for r in party_results if r[2] > LOC_CONF_THRESH]
+                ]
+            )
+            if "party setup" in party_text.lower():
+                curr_game_paused = False
+                inactive_detection_cooldown = INACTIVE_COOLDOWN
+                inactive_detection_mode = ActivityType.PARTY_SETUP
+                if current_activity.activity_type != ActivityType.PARTY_SETUP:
+                    current_activity = Activity(
+                        ActivityType.PARTY_SETUP, prev_non_idle_activity
+                    )
+                    print(f"Entered Party Setup")
 
         # _____________________________________________________________________
         #
         # CAPTURE DOMAIN
         # _____________________________________________________________________
 
-        if domain_cooldown == 0:
-            # Prevent capturing domain if in party setup,
-            # otherwise 4th character's name will be captured as domain.
+        if (
+            inactive_detection_cooldown == 0
+            or inactive_detection_mode == ActivityType.DOMAIN
+        ):
             try:
                 domain_cap = np.array(ImageGrab.grab(bbox=DOMAIN_COORD))
             except OSError:
                 print(
                     "OSError: Cannot capture screen. Try running as admin if this issue persists."
                 )
-                time.sleep(100)
+                time.sleep(1)
                 continue
 
             domain_results = reader.readtext(domain_cap, allowlist=ALLOWLIST)
@@ -642,10 +642,61 @@ while True:
                     != domain_match[0].search_str
                 ):
                     curr_game_paused = False
+                    inactive_detection_cooldown = INACTIVE_COOLDOWN
+                    inactive_detection_mode = ActivityType.DOMAIN
                     current_activity = Activity(ActivityType.DOMAIN, domain_match[0])
                     print(
                         f"Detected domain: {current_activity.activity_data.domain_name}"
                     )
+
+        # _____________________________________________________________________
+        #
+        # CAPTURE MAP LOCATION
+        # _____________________________________________________________________
+
+        if (
+            inactive_detection_cooldown == 0
+            or inactive_detection_mode == ActivityType.LOCATION
+        ):
+            try:
+                map_loc_cap = np.array(ImageGrab.grab(bbox=MAP_LOC_COORD))
+            except OSError:
+                print(
+                    "OSError: Cannot capture screen. Try running as admin if this issue persists."
+                )
+                time.sleep(1)
+                continue
+
+            map_loc_results = reader.readtext(map_loc_cap, allowlist=ALLOWLIST + ",")
+            # comma is included so that the city name can be omitted.
+
+            loc_text = " ".join(
+                [
+                    word.strip()
+                    for word in [
+                        r[1] for r in map_loc_results if r[2] > LOC_CONF_THRESH
+                    ]
+                ]
+            )
+            comma_idx = loc_text.find(",")
+            if comma_idx != -1:
+                # remove city name
+                loc_text = loc_text[:comma_idx]
+
+            if len(loc_text) > 0:
+                location = location_search(loc_text)
+                if location != None and (
+                    current_activity.activity_type != ActivityType.LOCATION
+                    or current_activity.activity_data.search_str != location.search_str
+                ):
+                    current_activity = Activity(ActivityType.LOCATION, location)
+                    prev_location = location
+                    curr_game_paused = False
+                    inactive_detection_cooldown = INACTIVE_COOLDOWN
+                    inactive_detection_mode = ActivityType.LOCATION
+                    print(f"Detected location: {location.location_name}")
+
+        time.sleep(0.1)  # Inactive mode doesn't require high refresh rate.
 
     if game_pause_state_cooldown > 0:
         game_pause_state_cooldown -= 1

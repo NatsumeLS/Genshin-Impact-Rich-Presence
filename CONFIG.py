@@ -160,7 +160,7 @@ for the OCR inference model to figure out how to work while the game is running.
 """
 
 
-ALLOWLIST = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-:'. "
+ALLOWLIST = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
 """
 Text characters whitelist to limit OCR results.
 
@@ -181,9 +181,10 @@ How confident the OCR should be before accepting a location name.
 (NOTE: This doesn't need to be too high, as incorrect names will be checked against the database)
 """
 
-PARTY_SETUP_DOMAIN_COOLDOWN = 5
+INACTIVE_COOLDOWN = 5
 """
-For this many iterations after the last time 'Party Setup' is detected, do not scan for domain name.
+For this many iterations after the last time any non-active activity is detected
+(e.g. party setup, domain, map), do not scan any other non-active activities.
 
 Prevents misreads/save CPU.
 """

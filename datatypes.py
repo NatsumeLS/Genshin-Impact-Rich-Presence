@@ -221,9 +221,15 @@ class Activity:
                     'large_text': str(self.activity_data.domain_type),
                 }
             case ActivityType.LOCATION:
+                if self.activity_data.subarea == '':
+                    state = self.activity_data.country
+                elif self.activity_data.country == '':
+                    state = self.activity_data.subarea
+                else:
+                    state = f'{self.activity_data.subarea}, {self.activity_data.country}'
                 return {
                     'details': f'Exploring {self.activity_data.location_name}',
-                    'state': f'{self.activity_data.subarea}, {self.activity_data.country}',
+                    'state': state,
                     'large_image': self.activity_data.image_key,
                 }
             case ActivityType.COMMISSION:

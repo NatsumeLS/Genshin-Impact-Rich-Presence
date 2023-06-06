@@ -158,7 +158,7 @@ if __name__ == "__main__": # run only if this file is explicitly being run
             party_text = ' '.join([word.strip() for word in [r[1] for r in party_results if r[2] > LOC_CONF_THRESH]])
             if 'party setup' in party_text.lower():
                 curr_game_paused = False
-                domain_cooldown = PARTY_SETUP_DOMAIN_COOLDOWN
+                domain_cooldown = INACTIVE_COOLDOWN
                 if curr_loc != party_text:
                     curr_loc = 'Party Setup'
                     print(f'Entered Party Setup')

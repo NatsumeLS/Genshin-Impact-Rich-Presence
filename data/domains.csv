@@ -12,10 +12,10 @@ obsession,Tower of Abject Pride | Obsession,forgery,domain_forgery_sumeru
 leading karma,Tower of Abject Pride | Leading Karma,forgery,domain_forgery_sumeru
 desert citadel,City Of Gold | Desert Citadel,blessing,domain_blessing_sumeru
 forsaken rampart,Molten Iron Fortress | Forsaken Rampart,blessing,domain_blessing_sumeru
-blessing: spring,Domain of Guyun | Spring,blessing,domain_blessing_liyue
+blessing spring,Domain of Guyun | Spring,blessing,domain_blessing_liyue
 fires of purification,Midsummer Courtyard | Fires of Purification,blessing,domain_blessing_mondstadt
 dance of steel,Valley of Remembrance | Dance of Steel,blessing,domain_blessing_mondstadt
-blessing: frost,Hidden Palace of Zhou Formula | Frost,blessing,domain_blessing_liyue
+blessing frost,Hidden Palace of Zhou Formula | Frost,blessing,domain_blessing_liyue
 autumn hunt,Momiji-Dyed Court | Autumn Hunt,blessing,domain_blessing_inazuma
 elegaic rime,Peak of Vindagnyr | Elegaic Rime,blessing,domain_forgery_dragonspine
 unyielding,Ridge Watch | Unyielding,blessing,domain_blessing_liyue
@@ -34,7 +34,7 @@ heart of the flames,Taishan Mansion | Heart of the Flames,mastery,domain_mastery
 circle of embers,Taishan Mansion | Circle of Embers,mastery,domain_mastery_liyue
 reign of violet,Violet Court | Reign of Violet,mastery,domain_mastery_inazuma
 thundering valley,Violet Court | Thundering Valley,mastery,domain_mastery_inazuma
-vine-infested ruins,Violet Court | Vine-Infested Ruins,mastery,domain_mastery_inazuma
+vineinfested ruins,Violet Court | Vine-Infested Ruins,mastery,domain_mastery_inazuma
 storming terror,Confront Stormterror | Memories: Storming Terror,trounce,boss_dvalin
 earthshaking dragon,Beneath the Dragon-Queller | Memories: Earthshaking Dragon,trounce,boss_azhdaha
 guardian of eternity,End of the Oneiric Euthemia | Memories: Guardian of Eternity,trounce,boss_magatsu_mitake_narukami_no_mikoto

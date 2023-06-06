@@ -1,6 +1,6 @@
 # Collated Game Data
 
-Contains search phrases to find in text & associated game data & image asset keys. Search phrases should be lowercase and should only contain characters in the `ALLOWLIST` (character search whitelist) as defined in [CONFIG.py](../CONFIG.py).
+Contains search phrases to find in text & associated game data & image asset keys. Search phrases **must be lowercase and should only contain characters in the `ALLOWLIST`** (character search whitelist) as defined in [CONFIG.py](../CONFIG.py). Currently, the `ALLOWLIST` contains only alphabets, commas, and the space character. The comma is detected so that the city name can be removed from the teleport location capture.
 
 To reduce OCR (image-to-text) errors, keep the `ALLOWLIST` as small as possible (e.g. quotes `"` are not needed. `"They" Too Were Once Flawless` can be searched using the phrase `too were once flawless`).
 
