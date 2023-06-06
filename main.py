@@ -1,13 +1,18 @@
 """
-Contains coordinate data for image capture and OCR settings.
+___________________________________________________________________
 
-Update coordinates and settings as necessary. Refer to the README for more info.
+Genshin Impact Discord Rich Presence v0.1
+
+Setup CONFIG.py with the game resolution, username, etc...
+before using.
+
+To exit, press Ctrl+C or close the terminal.
+___________________________________________________________________
 """
 
-from typing import Optional, Text, Union
+from typing import Optional
 from asyncio import new_event_loop, set_event_loop
 import threading
-import cv2
 import csv
 import numpy as np
 import easyocr
@@ -21,18 +26,7 @@ from PIL import ImageGrab
 from CONFIG import *
 from datatypes import *
 
-start_text = """
-___________________________________________________________________
-
-Genshin Impact Discord Rich Presence v0.1
-
-Setup CONFIG.py with the screen coordinates & username before using.
-
-To exit, press Ctrl+C or close the terminal.
-___________________________________________________________________
-"""
-
-print(start_text)
+print(__doc__)
 
 # Load csv tables
 

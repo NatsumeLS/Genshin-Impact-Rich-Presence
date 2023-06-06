@@ -14,23 +14,29 @@ This Discord Rich Presence doesn't tamper with Genshin Impact game files in any 
 
 ## Setup guide
 
-### 0. Install Python
+### 1. Download project, install Python, update NVIDIA driver
 
-You will need Python 3.8 or newer (latest Python version is recommended). Install from [here](https://www.python.org/downloads/).
+You will need **Python 3.8 or newer** (latest Python version is recommended). Install from [here](https://www.python.org/downloads/).
 
-### 1. Update NVIDIA Game Ready Driver
+Download the latest project code using git:
 
-Update to the latest NVIDIA game ready graphics driver that supports CUDA 11.8 (version > 525).
+```bat
+git clone https://github.com/euwbah/Genshin-Impact-Rich-Presence.git
+```
 
-### 2. Setup image capture coordinates
+Alternatively, [download code as zip](https://github.com/euwbah/Genshin-Impact-Rich-Presence/archive/refs/heads/main.zip).
 
-Modify [CONFIG.py](CONFIG.py) to configure coordinates of specific game text as shown below.
+Check NVIDIA GeForce Experience for updates. Game Ready graphics driver version >525 is required for CUDA 11.8 support.
 
-If you're running the game in fullscreen with a standard 16:9 aspect ratio, you can just set the `GAME_RESOLUTION` variable to your screen resolution (e.g. `GAME_RESOLUTION = 1080` for 1920x1080, 1080p).
+### 2. Set game resolution/image capture coordinates
 
-🟠 If you're using DLDSR/DLSS/NVIDIA Image Sharpening or any otherGPU configuration that performs image upscaling or oversampling (not counting the built-in AMD FSR2 anti-aliasing mode), you'll need to set this to the final output resolution that your screen will display. E.g. 75% resolution with NVIDIA Image Sharpening will still result in an image with the same resolution as your monitor, so you should use the monitor resolution instead of the in-game resolution.
+Edit these settings in [CONFIG.py](CONFIG.py):
 
-The **`GAME_RESOLUTION` setting only works if you're running the game in fullscreen at a 16:9 aspect ratio.** Otherwise, you'll need to set `GAME_RESOLUTION = 0` and follow [this guide to configure the coordinates manually.](configure%20coordinates.md)
+If you're running the game in fullscreen with a standard 16:9 aspect ratio, set the `GAME_RESOLUTION` variable to your screen resolution (e.g. use `GAME_RESOLUTION = 1080` for 1920x1080, 1080p).
+
+🟠 If you're using DLDSR/DLSS/NVIDIA Image Sharpening or any other GPU configuration that performs image upscaling or oversampling (not counting the built-in AMD FSR2 anti-aliasing mode), you'll need to set this to the final output resolution that your screen will display. E.g. 75% resolution with NVIDIA Image Sharpening will still result in an image with the same resolution as your monitor, so you should use the monitor resolution instead of the in-game resolution.
+
+⚠️ The **`GAME_RESOLUTION` setting only works if you're running the game in fullscreen at a 16:9 aspect ratio.** Otherwise, you'll need to set `GAME_RESOLUTION = 0` and follow [this guide to configure the coordinates manually.](configure%20coordinates.md)
 
 ### 3. Configure settings in [CONFIG.py](CONFIG.py)
 
@@ -52,9 +58,25 @@ py test_imagegrab.py
 
 ### 5. Start Discord Rich Presence
 
-Double click [run.bat](run.bat) to start Discord Rich Presence for Genshin Impact.
+Double click [run.bat](run.bat) to start Discord Rich Presence for Genshin Impact. You can create an application/desktop shortcut for run.bat to make it easier to start.
 
 -----
+
+## Development
+
+To set up the project for development/testing.
+
+```bat
+py -m venv venv
+.\venv\Scripts\activate.bat
+pip install --upgrade pip
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+pip install -r requirements.txt
+```
+
+Use an IDE/editor (like VSCode) with Python venv support so you don't have to activate the venv manually every time.
+
+`py main.py` runs the program.
 
 ## Credits
 
