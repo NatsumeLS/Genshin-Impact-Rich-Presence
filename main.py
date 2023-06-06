@@ -1,7 +1,7 @@
 """
 ___________________________________________________________________
 
-Genshin Impact Discord Rich Presence v0.1.1
+Genshin Impact Discord Rich Presence v0.1.2
 
 Setup CONFIG.py with the game resolution, username, etc...
 before using.
@@ -28,60 +28,8 @@ from datatypes import *
 
 print(__doc__)
 
-# Load csv tables
-
-BOSSES: list[Boss] = None
-CHARACTERS: list[Character] = None
-DOMAINS: list[Domain] = None
-LOCATIONS: list[Location] = None
-try:
-    with open("data/characters.csv", "r") as csvfile:
-        reader = csv.reader(csvfile, delimiter=",")
-        CHARACTERS = []
-        for row in reader:
-            c = Character(*row)
-            if (MC_AETHER and c.search_str == "aether") or (
-                not MC_AETHER and c.search_str == "lumine"
-            ):
-                c.search_str = USERNAME.lower()
-                c.character_display_name = USERNAME
-
-            if c.search_str == "wanderer":
-                c.search_str = WANDERER_NAME.lower()
-                c.character_display_name = WANDERER_NAME
-
-            CHARACTERS.append(c)
-        print("Loaded characters.csv")
-except Exception as e:
-    print(f"Error loading data/characters.csv: {e}")
-
-try:
-    with open("data/domains.csv", "r") as csvfile:
-        reader = csv.reader(csvfile, delimiter=",")
-        DOMAINS = [Domain(*row) for row in reader]
-        print("Loaded domains.csv")
-except Exception as e:
-    print(f"Error loading data/domains.csv: {e}")
-
-try:
-    with open("data/locations.csv", "r") as csvfile:
-        reader = csv.reader(csvfile, delimiter=",", escapechar="\\")
-        LOCATIONS = [Location(*row) for row in reader]
-        print("Loaded locations.csv")
-except Exception as e:
-    print(f"Error loading data/locations.csv: {e}")
-
-try:
-    with open("data/bosses.csv", "r") as csvfile:
-        reader = csv.reader(csvfile, delimiter=",")
-        BOSSES = [Boss(*row) for row in reader]
-        print("Loaded bosses.csv")
-except Exception as e:
-    print(f"Error loading data/bosses.csv: {e}")
-
-BOSSES_SHORTEST_SEARCH = min([len(b.search_str) for b in BOSSES])
-CHARACTERS_SHORTEST_SEARCH = min([len(c.search_str) for c in CHARACTERS])
-LOCATIONS_SHORTEST_SEARCH = min([len(l.search_str) for l in LOCATIONS])
+# Data contains csv tables, file watcher, and best text match algorithms.
+DATA: Data = Data()
 
 current_active_character = 0  # 1-indexed. 0 is undetectable/game paused.
 
@@ -288,93 +236,6 @@ def update_genshin_open_status():
         print("GenshinImpact.exe minimized/closed. Pausing OCR.")
 
 
-party_capture_cache = {}
-world_boss_capture_cache = {}
-location_capture_cache = {}
-
-
-def character_search(charname_text) -> Optional[Character]:
-    """
-    Searches for matching character based on best match available
-    """
-    if len(charname_text) < CHARACTERS_SHORTEST_SEARCH:
-        return None
-    
-    if charname_text.lower() in party_capture_cache:
-        return party_capture_cache[charname_text.lower()]
-
-    charname_match = [c for c in CHARACTERS if c.search_str in charname_text.lower()]
-    charname_match.sort(key=lambda c: len(c.search_str), reverse=True)
-    if DEBUG_MODE and len(charname_match) > 1:
-        print(
-            f'WARN: Multiple characters matched for "{charname_text}": {[c.character_name for c in charname_match]}'
-        )
-        print("Picking longest match")
-    if len(charname_match) > 0:
-        party_capture_cache[charname_text.lower()] = charname_match[0]
-        return charname_match[0]
-
-    party_capture_cache[charname_text.lower()] = None
-    return None
-
-
-def location_search(loc_text) -> Optional[Location]:
-    """
-    Searches for matching location based on the best match available.
-    """
-    if len(loc_text) < LOCATIONS_SHORTEST_SEARCH:
-        return None
-    
-    if loc_text.lower() in location_capture_cache:
-        return location_capture_cache[loc_text.lower()]
-
-    location_match = [l for l in LOCATIONS if l.search_str in loc_text.lower()]
-    location_match.sort(key=lambda l: len(l.search_str), reverse=True)
-
-    loc = None
-
-    if len(location_match) > 0:
-        loc = location_match[0]
-
-    location_capture_cache[loc_text.lower()] = loc
-
-    if DEBUG_MODE:
-        if len(location_match) > 1:
-            print(
-                f'WARN: Multiple locations matched for "{loc_text}": {[l.location_name for l in location_match]}'
-            )
-            print("Picking longest match")
-        print(
-            f'Added "{loc_text.lower()}" to cache: {loc and loc.location_name} ({len(location_capture_cache)})'
-        )
-    return loc
-
-
-def boss_search(boss_text) -> Optional[Boss]:
-    """
-    Searches for matching world boss based on the best match available.
-    """
-    if len(boss_text) < BOSSES_SHORTEST_SEARCH:
-        return None
-    
-    if boss_text.lower() in world_boss_capture_cache:
-        return world_boss_capture_cache[boss_text.lower()]
-
-    boss_match = [b for b in BOSSES if b.search_str in boss_text.lower()]
-    boss_match.sort(key=lambda b: len(b.search_str), reverse=True)
-    if DEBUG_MODE and len(boss_match) > 1:
-        print(
-            f'WARN: Multiple world bosses matched for "{boss_text}": {[b.boss_name for b in boss_match]}'
-        )
-        print("Picking longest match")
-    if len(boss_match) > 0:
-        world_boss_capture_cache[boss_text.lower()] = boss_match[0]
-        return boss_match[0]
-
-    world_boss_capture_cache[boss_text.lower()] = None
-    return None
-
-
 loop_count = 0
 
 while True:
@@ -493,7 +354,7 @@ while True:
                     avg_conf = sum([r[2] for r in result]) / len(result)
 
                     if avg_conf > NAME_CONF_THRESH:
-                        char = character_search(text)
+                        char = DATA.search_character(text)
                         if char != None and (
                             current_characters[character_index] == None
                             or char != current_characters[character_index]
@@ -532,7 +393,7 @@ while True:
                         current_activity = Activity(ActivityType.COMMISSION, None)
                         print(f"Detected doing commissions")
                 else:
-                    location = location_search(loc_text)
+                    location = DATA.search_location(loc_text)
                     if location != None and (
                         current_activity.activity_type != ActivityType.LOCATION
                         or current_activity.activity_data.search_str
@@ -566,7 +427,7 @@ while True:
                 ]
             )
             if len(boss_text) > 0:
-                boss = boss_search(boss_text)
+                boss = DATA.search_boss(boss_text)
 
                 if boss != None and (
                     current_activity.activity_type != ActivityType.WORLD_BOSS
@@ -644,19 +505,17 @@ while True:
                 ]
             )
             if len(domain_text) > 0:
-                domain_match = [
-                    d for d in DOMAINS if d.search_str in domain_text.lower()
-                ]
+                domain = DATA.search_domain(domain_text)
 
-                if len(domain_match) == 1 and (
+                if domain != None and (
                     current_activity.activity_type != ActivityType.DOMAIN
                     or current_activity.activity_data.search_str
-                    != domain_match[0].search_str
+                    != domain.search_str
                 ):
                     curr_game_paused = False
                     inactive_detection_cooldown = INACTIVE_COOLDOWN
                     inactive_detection_mode = ActivityType.DOMAIN
-                    current_activity = Activity(ActivityType.DOMAIN, domain_match[0])
+                    current_activity = Activity(ActivityType.DOMAIN, domain)
                     print(
                         f"Detected domain: {current_activity.activity_data.domain_name}"
                     )
@@ -696,7 +555,7 @@ while True:
                 loc_text = loc_text[:comma_idx]
 
             if len(loc_text) > 0:
-                location = location_search(loc_text)
+                location = DATA.search_location(loc_text)
                 if location != None and (
                     current_activity.activity_type != ActivityType.LOCATION
                     or current_activity.activity_data.search_str != location.search_str
