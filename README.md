@@ -62,6 +62,18 @@ Double click [run.bat](run.bat) to start Discord Rich Presence for Genshin Impac
 
 -----
 
+## Contribution
+
+The [data](data/) folder contains csv data that requires manual input.
+
+Quite a few locations/points of interests may be missing from the current data, and as new domains/characters/bosses/locations get added, this project requires continuous community contribution to maintain these records.
+
+The csv data files have a hot-reload feature, so you don't need to restart the Discord RPC program to see effected changes to these files, you can enter them as you play the game and find unmarked locations/missing data.
+
+Once modifying data files, please submit a pull request or issue to this repository :)
+
+If new image assets need to be added, they have to be manually published to the Discord Application which is currently owned by me ([@euwbah](https://github.com/euwbah)). Note that there is a limit of 300 image assets, so keep new images to a minimum: only include game icons, location emblems, world & trounce bosses, character portraits, and one of each domain type (Blessing/Mastery/Forgery) per region.
+
 ## Development
 
 To set up the project for development/testing.
