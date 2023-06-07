@@ -213,7 +213,7 @@ Once character names are read, character names are OCR'd least often, since they
 (Character names don't affect current active character. Active character detection is super fast.)
 """
 
-OCR_CHARNAMES_ONE_IN = 12
+OCR_CHARNAMES_ONE_IN = 60
 """Process character name every N loops"""
 OCR_LOC_ONE_IN = 1
 """Process location every N loops"""

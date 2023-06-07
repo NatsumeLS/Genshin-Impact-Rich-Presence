@@ -94,6 +94,13 @@ inactive_detection_mode: Optional[ActivityType] = None
 What was the inactive activity that was last detected.
 """
 
+reload_party_flag = False
+"""
+Set to True after party setup screen is detected.
+
+Forces character names to be reloaded once active gameplay is detected.
+"""
+
 
 """
 
@@ -327,6 +334,7 @@ while True:
         if (
             loop_count % OCR_CHARNAMES_ONE_IN == 0
             or len([a for a in current_characters if a == None]) > 0
+            or reload_party_flag
         ):
             try:
                 charname_cap = [
@@ -339,6 +347,8 @@ while True:
                 time.sleep(1)
                 continue
 
+            reload_party_flag = False
+            
             # ([bbox top left, top right, bottom right, bottom left], text, confidence)
             char_results = [
                 reader.readtext(
@@ -476,6 +486,7 @@ while True:
                     current_activity = Activity(
                         ActivityType.PARTY_SETUP, prev_non_idle_activity
                     )
+                    reload_party_flag = True
                     print(f"Entered Party Setup")
 
         # _____________________________________________________________________
