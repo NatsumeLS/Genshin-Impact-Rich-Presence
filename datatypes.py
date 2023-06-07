@@ -96,7 +96,7 @@ class DomainType(Enum):
             case "TROUNCE":
                 return "Trounce Domain"
             case "LIMITED_EVENT":
-                return "Limited Time Event Domain"
+                return "Limited-Time Event Domain"
             case "ONE_TIME":
                 return "Domain"
 
@@ -231,7 +231,7 @@ class Activity:
             case ActivityType.DOMAIN:
                 return {
                     "details": self.activity_data.domain_name,
-                    "state": f"Clearing a domain",
+                    "state": f"Clearing a {self.activity_data.domain_type}",
                     "large_image": self.activity_data.image_key,
                     "large_text": str(self.activity_data.domain_type),
                 }
