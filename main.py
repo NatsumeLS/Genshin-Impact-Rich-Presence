@@ -400,7 +400,7 @@ while True:
             if len(loc_text) > 0:
                 if "mission accept" in loc_text.lower():
                     if current_activity.activity_type != ActivityType.COMMISSION:
-                        current_activity = Activity(ActivityType.COMMISSION, None)
+                        current_activity = Activity(ActivityType.COMMISSION, prev_location)
                         print(f"Detected doing commissions")
                 else:
                     location = DATA.search_location(loc_text)

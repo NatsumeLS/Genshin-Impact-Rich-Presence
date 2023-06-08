@@ -174,7 +174,9 @@ class ActivityType(Enum):
     """
     COMMISSION = auto()
     """
-    activity_data: `None`
+    activity_data: `Location` of last location.
+    
+    Assumes commissions are done at the last visited location (which is usually true)
     """
     WORLD_BOSS = auto()
     """
@@ -245,13 +247,16 @@ class Activity:
                         f"{self.activity_data.subarea}, {self.activity_data.country}"
                     )
                 return {
-                    "details": f"Exploring {self.activity_data.location_name}",
+                    "details": f"In {self.activity_data.location_name}",
                     "state": state,
                     "large_image": self.activity_data.image_key,
                 }
             case ActivityType.COMMISSION:
                 return {
                     "state": "Doing commissions",
+                    "details": f"In {self.activity_data.location_name}, {self.activity_data.country}"
+                    if self.activity_data != None
+                    else "",
                     "large_image": "icon_commission",
                 }
             case ActivityType.WORLD_BOSS:
@@ -297,7 +302,7 @@ class Data(PatternMatchingEventHandler):
 
     def __init__(self):
         super().__init__(patterns=["*.csv"])  # init PatternMatchingEventHandler
-        
+
         self._last_modified = time.time()
         """
         Keep track of the last time on_modified was triggered.
@@ -421,11 +426,11 @@ class Data(PatternMatchingEventHandler):
 
         self.party_capture_cache[charname_text.lower()] = None
         return None
-    
+
     def search_domain(self, domain_text) -> Optional[Domain]:
         """
         Searches for matching domain based on the best match available.
-        
+
         Has caching to reduce CPU.
         """
         if len(domain_text) < self.domains_shortest_search:
@@ -489,21 +494,21 @@ class Data(PatternMatchingEventHandler):
     def on_modified(self, event: FileModifiedEvent):
         """
         Handler for file modified event.
-        
+
         Immediately reloads data once file is modified.
         """
         # XXX: For some weird reason, watchdog sends
-        # file modified events twice in very quick 
+        # file modified events twice in very quick
         # succession. This hack attempts to prevent this,
         # but there's no guarantee of it working.
         if time.time() - self._last_modified < 1:
             self._last_modified = time.time()
             return
-        
+
         self._last_modified = time.time()
-        
-        time.sleep(0.5) # XXX: Hack to solve race condition
-        
+
+        time.sleep(0.5)  # XXX: Hack to solve race condition
+
         match os.path.basename(event.src_path):
             case "bosses.csv":
                 try:
@@ -514,7 +519,9 @@ class Data(PatternMatchingEventHandler):
                         self.bosses_shortest_search = min(
                             [len(boss.search_str) for boss in self.bosses]
                         )
-                        print(f"bosses.csv modified. Updated bosses: {len(self.bosses)} bosses.")
+                        print(
+                            f"bosses.csv modified. Updated bosses: {len(self.bosses)} bosses."
+                        )
                 except Exception as e:
                     print(f"Error loading data/bosses.csv: {e}")
             case "characters.csv":
@@ -540,7 +547,9 @@ class Data(PatternMatchingEventHandler):
                         self.characters_shortest_search = min(
                             [len(character.search_str) for character in self.characters]
                         )
-                        print(f"characters.csv modified. Updated characters: {len(self.characters)} characters.")
+                        print(
+                            f"characters.csv modified. Updated characters: {len(self.characters)} characters."
+                        )
                 except Exception as e:
                     print(f"Error loading data/characters.csv: {e}")
             case "domains.csv":
@@ -552,7 +561,9 @@ class Data(PatternMatchingEventHandler):
                         self.domains_shortest_search = min(
                             [len(domain.search_str) for domain in self.domains]
                         )
-                        print(f"domains.csv modified. Updated domains: {len(self.domains)} domains.")
+                        print(
+                            f"domains.csv modified. Updated domains: {len(self.domains)} domains."
+                        )
                 except Exception as e:
                     print(f"Error loading data/domains.csv: {e}")
             case "locations.csv":
@@ -564,14 +575,15 @@ class Data(PatternMatchingEventHandler):
                         self.locations_shortest_search = min(
                             [len(location.search_str) for location in self.locations]
                         )
-                        print(f"locations.csv modified. Updated locations: {len(self.locations)} locations.")
+                        print(
+                            f"locations.csv modified. Updated locations: {len(self.locations)} locations."
+                        )
                 except Exception as e:
                     print(f"Error loading data/locations.csv: {e}")
 
 
-if __name__ == '__main__':
-    print('Debugging Data class')
+if __name__ == "__main__":
+    print("Debugging Data class")
     data = Data()
     while True:
         time.sleep(1)
-        
