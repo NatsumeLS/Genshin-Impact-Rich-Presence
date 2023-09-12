@@ -1,72 +1,72 @@
-aether,char_aether,Aether
-albedo,char_albedo,Albedo
-alhaitham,char_alhaitham,Alhaitham
-aloy,char_aloy,Aloy
-amber,char_amber,Amber
-itto,char_arataki_itto,Arataki Itto
-barbara,char_barbara,Barbara
-baizhu,char_baizhu,Baizhu
-beidou,char_beidou,Beidou
-bennett,char_bennett,Bennett
-candace,char_candace,Candace
-chongyun,char_chongyun,Chongyun
-collei,char_collei,Collei
-cyno,char_cyno,Cyno
-dehya,char_dehya,Dehya
-diluc,char_diluc,Diluc
-diona,char_diona,Diona
-dori,char_dori,Dori
-eula,char_eula,Eula
-faruzan,char_faruzan,Faruzan
-fischl,char_fischl,Fischl
-ganyu,char_ganyu,Ganyu
-gorou,char_gorou,Gorou
-hu tao,char_hu_tao,Hu Tao
-jean,char_jean,Jean
-kazuha,char_kaedehara_kazuha,Kaedehara Kazuha
-kaeya,char_kaeya,Kaeya
-ayaka,char_kamisato_ayaka,Kamisato Ayaka
-ayato,char_kamisato_ayato,Kamisato Ayato
-kaveh,char_kaveh,Kaveh
-keqing,char_keqing,Keqing
-kirara,char_kirara,Kirara
-klee,char_klee,Klee
-sara,char_kujo_sara,Kujo Sara
-kuki,char_kuki_shinobu,Kuki Shinobu
-layla,char_layla,Layla
-lisa,char_lisa,Lisa
-lumine,char_lumine,Lumine
-mika,char_mika,Mika
-mona,char_mona,Mona
-nahida,char_nahida,Nahida
-nilou,char_nilou,Nilou
-ningguang,char_ningguang,Ningguang
-noelle,char_noelle,Noelle
-qiqi,char_qiqi,Qiqi
-shogun,char_raiden_shogun,Raiden Shogun
-razor,char_razor,Razor
-rosaria,char_rosaria,Rosaria
-kokomi,char_sangonomiya_kokomi,Sangonomiya Kokomi
-sayu,char_sayu,Sayu
-shenhe,char_shenhe,Shenhe
-heizou,char_shikanoin_heizou,Shikanoin Heizou
-sucrose,char_sucrose,Sucrose
-tartaglia,char_tartaglia,Tartaglia
-thoma,char_thoma,Thoma
-tighnari,char_tighnari,Tighnari
-venti,char_venti,Venti
-wanderer,char_wanderer,Wanderer
-xiangling,char_xiangling,Xiangling
-xiao,char_xiao,Xiao
-xingqiu,char_xingqiu,Xingqiu
-xinyan,char_xinyan,Xinyan
-miko,char_yae_miko,Yae Miko
-yanfei,char_yanfei,Yanfei
-yaoyao,char_yaoyao,Yaoyao
-yelan,char_yelan,Yelan
-yoimiya,char_yoimiya,Yoimiya
-yun jin,char_yun_jin,Yun Jin
-zhongli,char_zhongli,Zhongli
-lynette,https://i.imgur.com/DFvgzE9.png,Lynette
-lyney,https://i.imgur.com/5Lzk04h.png,Lyney
-freminet,https://i.imgur.com/XWuEeaq.png,Freminet
+aether,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Aether.png,Aether
+albedo,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Albedo.png,Albedo
+alhaitham,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Alhaitham.png,Alhaitham
+aloy,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Aloy.png,Aloy
+amber,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Amber.png,Amber
+itto,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Arataki%20Itto.png,Arataki Itto
+barbara,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Barbara.png,Barbara
+baizhu,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Baizhu.png,Baizhu
+beidou,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Beidou.png,Beidou
+bennett,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Bennett.png,Bennett
+candace,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Candace.png,Candace
+chongyun,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Chongyun.png,Chongyun
+collei,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Collei.png,Collei
+cyno,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Cyno.png,Cyno
+dehya,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Dehya.png,Dehya
+diluc,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Diluc.png,Diluc
+diona,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Diona.png,Diona
+dori,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Dori.png,Dori
+eula,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Eula.png,Eula
+faruzan,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Faruzan.png,Faruzan
+fischl,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Fischl.png,Fischl
+ganyu,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Ganyu.png,Ganyu
+gorou,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Gorou.png,Gorou
+hu tao,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Hu%20Tao.png,Hu Tao
+jean,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Jean.png,Jean
+kazuha,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Kaedehara%20Kazuha.png,Kaedehara Kazuha
+kaeya,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Kaeya.png,Kaeya
+ayaka,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Kamisato%20ayaka.png,Kamisato Ayaka
+ayato,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Kamisato%20ayato.png,Kamisato Ayato
+kaveh,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Kaveh.png,Kaveh
+keqing,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Keqing.png,Keqing
+kirara,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Kirara.png,Kirara
+klee,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Klee.png,Klee
+sara,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Kujo%20Sara.png,Kujo Sara
+kuki,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Kuki%20Shinobu.png,Kuki Shinobu
+layla,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Layla.png,Layla
+lisa,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Lisa.png,Lisa
+lumine,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Lumine.png,Lumine
+mika,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Mika.png,Mika
+mona,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Mona.png,Mona
+nahida,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Nahida.png,Nahida
+nilou,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Nilou.png,Nilou
+ningguang,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Ningguang.png,Ningguang
+noelle,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Noelle.png,Noelle
+qiqi,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Qiqi.png,Qiqi
+shogun,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20raiden%20Shogun.png,Raiden Shogun
+razor,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Razor.png,Razor
+rosaria,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Rosaria.png,Rosaria
+kokomi,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Sangonomiya%20Kokomi.png,Sangonomiya Kokomi
+sayu,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Sayu.png,Sayu
+shenhe,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Shenhe.png,Shenhe
+heizou,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Shikanoin%20Heizou.png,Shikanoin Heizou
+sucrose,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Sucrose.png,Sucrose
+tartaglia,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Tartaglia.png,Tartaglia
+thoma,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Thoma.png,Thoma
+tighnari,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Tighnari.png,Tighnari
+venti,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Venti.png,Venti
+wanderer,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Wanderer.png,Wanderer
+xiangling,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Xiangling.png,Xiangling
+xiao,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Xiao.png,Xiao
+xingqiu,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Xingqiu.png,Xingqiu
+xinyan,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Xinyan.png,Xinyan
+miko,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Yae%20Miko.png,Yae Miko
+yanfei,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Yanfei.png,Yanfei
+yaoyao,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Yaoyao.png,Yaoyao
+yelan,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Yelan.png,Yelan
+yoimiya,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Yoimiya.png,Yoimiya
+yun jin,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Yun%20Jin.png,Yun Jin
+zhongli,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Zhongli.png,Zhongli
+lynette,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Lynette.png,Lynette
+lyney,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Lyney.png,Lyney
+freminet,https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/Image%20Assets/Characters/Char%20Freminet.png,Freminet
