@@ -25,7 +25,7 @@ Require **Python 3.8 or newer**.
 
 ### 3. Start Discord Rich Presence
 
-**Open [Run.bat](Run.bat)** to start.
+**Open [Start.bat](Start.bat)** to start.
 
 ## Similar Projects
 
