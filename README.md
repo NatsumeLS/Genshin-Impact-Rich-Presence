@@ -21,7 +21,7 @@ Require **Python 3.8 or newer**.
 
 - Configure `USERNAME` to match your username. (**Must be exactly the same**.)
 - Set `MC_AETHER` to `True` if your main character is Aether. (`False` if Lumine.)
-- (SPOILER) Set `WANDERER_NAME` to your custom Wanderer's name in lowercase.
+- Set `WANDERER_NAME` to your custom Wanderer's name in lowercase.
 
 ### 3. Start Discord Rich Presence
 
