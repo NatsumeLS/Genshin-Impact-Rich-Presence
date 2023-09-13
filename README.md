@@ -9,7 +9,23 @@ This Discord Rich Presence doesn't interact with the game in any ways. It works 
 
 ## Guide
 
-Work in progress
+### 1. Install Python and download the project
+
+Require **Python 3.8 or newer**.
+
+🐍 [Download Python](https://www.python.org/downloads)
+
+📁 [Download the project](https://github.com/NatsumeLS/Genshin-Impact-Rich-Presence/archive/refs/heads/main.zip)
+
+### 2. Configure settings in [CONFIG.py](CONFIG.py)
+
+- Configure `USERNAME` to match your username. (**Must be exactly the same**.)
+- Set `MC_AETHER` to `True` if your main character is Aether. (`False` if Lumine.)
+- (SPOILER) Set `WANDERER_NAME` to your custom Wanderer's name in lowercase.
+
+### 3. Start Discord Rich Presence
+
+**Open [Run.bat](Run.bat)** to start.
 
 ## Similar Projects
 
