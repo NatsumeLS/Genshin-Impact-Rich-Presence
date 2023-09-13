@@ -127,7 +127,7 @@ def discord_rpc_loop():
         printed_wait = False
         while True:
             try:
-                rpc = discord.Presence(DISC_APP_ID)
+                rpc = discord.Presence('1045753301196619917')
                 rpc.connect()
                 print("Connected to Discord Client!")
                 break
