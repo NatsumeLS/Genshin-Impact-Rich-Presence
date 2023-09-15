@@ -168,7 +168,7 @@ def discord_rpc_loop():
             c = current_characters[current_active_character - 1]
             if c != None:
                 params["small_image"] = c.image_key
-                params["small_text"] = f"playing {c.character_display_name}"
+                params["small_text"] = f"Playing as {c.character_display_name}"
 
         if previous_update != params:
             try:

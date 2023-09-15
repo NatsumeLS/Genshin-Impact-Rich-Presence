@@ -218,17 +218,17 @@ class Activity:
                     "state": "Loading"
                     if not self.activity_data
                     else "Somewhere in Teyvat",
-                    "large_image": "icon_paimon",
+                    "large_image": "https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/assets/Game%20Icons/Paimon.png",
                 }
             case ActivityType.PAUSED:
                 return {
                     "state": "Game paused",
-                    "large_image": "icon_paimon",
+                    "large_image": "https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/assets/Game%20Icons/Paimon.png",
                 }
             case ActivityType.PARTY_SETUP:
                 return {
                     "state": "Party Setup",
-                    "large_image": "icon_party_setup",
+                    "large_image": "https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/assets/Game%20Icons/Party%20Setup.png",
                 }
             case ActivityType.DOMAIN:
                 return {
@@ -257,7 +257,7 @@ class Activity:
                     "details": f"In {self.activity_data.location_name}, {self.activity_data.country}"
                     if self.activity_data != None
                     else "",
-                    "large_image": "icon_commission",
+                    "large_image": "https://raw.githubusercontent.com/NatsumeLS/Genshin-Impact-Rich-Presence/main/assets/Game%20Icons/Commissions.png",
                 }
             case ActivityType.WORLD_BOSS:
                 return {
